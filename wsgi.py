@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import json
+import os
 
 from os.path import isfile
 from flask import Flask, make_response, request
@@ -35,6 +36,11 @@ rsvp_api = {
 
 app = Flask(__name__)
 app.config["MONGO_DBNAME"] = "rsvp"
+
+db_url = os.environ.get("OPENSHIFT_MONGODB_DB_URL")
+if db_url is not None:
+    app.config["MONGO_URL"] = db_url
+
 mongo = PyMongo(app)
 
 
@@ -70,8 +76,6 @@ app.config["SECRET_KEY"] = secrets["key"]
 auth = HTTPBasicAuth()
 rsvp_api["users"] = secrets["users"]
 seed_users(secrets["users"])
-
-# TODO: Implement CSRF protection using http://sjl.bitbucket.org/flask-csrf/
 
 
 @auth.verify_password
