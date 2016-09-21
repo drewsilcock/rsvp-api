@@ -1,3 +1,6 @@
+# Super secret app-specific files
+.secrets.json
+
 # Ignore vim files
 *~
 .*.swp
